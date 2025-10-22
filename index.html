@@ -1,152 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Statistics Dashboard</title>
-
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- Google Fonts & Styling -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <title>EnergiFrance Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.plot.ly/plotly-2.26.1.min.js"></script>
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f7f8fa;
-      color: #222;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      background-color: #1e293b;
-      color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    header h1 {
-      font-size: 1.5rem;
-      margin: 0;
-    }
-
-    nav a {
-      color: white;
-      margin-left: 1rem;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 2rem auto;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      padding: 2rem;
-    }
-
-    canvas {
-      width: 100%;
-      height: 400px;
-    }
-
-    .controls {
-      margin-top: 1.5rem;
-      text-align: center;
-    }
-
-    button {
-      background-color: #2563eb;
-      color: white;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      margin: 0.3rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.2s;
-    }
-
-    button:hover {
-      background-color: #1d4ed8;
-    }
-
-    footer {
-      text-align: center;
-      padding: 1rem;
-      color: #555;
-      font-size: 0.9rem;
-    }
+    body { padding-top: 70px; background-color: #f8f9fa; }
+    .navbar { background-color: #343a40; }
+    .navbar-brand, .navbar-nav .nav-link { color: #ffffff !important; }
+    .metric-card { background-color: #ffffff; border-radius: 0.5rem; padding: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .metric-value { font-size: 2rem; font-weight: bold; }
+    .metric-label { font-size: 0.9rem; color: #6c757d; }
+    .chart-container { background-color: #ffffff; border-radius: 0.5rem; padding: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>📊 Statistics Dashboard</h1>
-    <nav>
-      <a href="#">Overview</a>
-      <a href="#">Data</a>
-      <a href="#">About</a>
-    </nav>
-  </header>
-
-  <div class="container">
-    <h2>Monthly Data Overview</h2>
-    <canvas id="myChart"></canvas>
-
-    <div class="controls">
-      <button onclick="updateChart('increase')">Increase Data</button>
-      <button onclick="updateChart('random')">Randomize Data</button>
-      <button onclick="updateChart('reset')">Reset Data</button>
+<nav class="navbar fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">⚡ EnergiFrance</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="#overview">Vue globale</a></li>
+        <li class="nav-item"><a class="nav-link" href="#timeseries">Courbes</a></li>
+        <li class="nav-item"><a class="nav-link" href="#source-share">Part renouvelables</a></li>
+        <li class="nav-item"><a class="nav-link" href="#regional-map">Carte régionale</a></li>
+      </ul>
     </div>
   </div>
+</nav>
 
-  <footer>
-    © 2025 My Statistics Site | Built with ❤️ and GitHub Pages
-  </footer>
+<div class="container">
 
-  <script>
-    // Initial data
-    let labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-    let dataValues = [12, 19, 8, 15, 22, 10];
+  <!-- Overview metrics -->
+  <section id="overview" class="my-5">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="metric-card text-center">
+          <div class="metric-label">Consommation moyenne (MWh)</div>
+          <div class="metric-value" id="metric-consumption">—</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="metric-card text-center">
+          <div class="metric-label">Production renouvelable totale (MWh)</div>
+          <div class="metric-value" id="metric-renewable-total">—</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="metric-card text-center">
+          <div class="metric-label">Part des renouvelables (%)</div>
+          <div class="metric-value" id="metric-renewable-share">—</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const chart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Dataset Example',
-          data: dataValues,
-          backgroundColor: '#2563eb',
-          borderRadius: 6
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: { beginAtZero: true }
-        }
-      }
-    });
+  <!-- Time series chart -->
+  <section id="timeseries" class="chart-container">
+    <h4>Production vs Consommation dans le temps</h4>
+    <div id="chart-timeseries" style="height: 400px;"></div>
+  </section>
 
-    function updateChart(action) {
-      if (action === 'increase') {
-        dataValues = dataValues.map(v => v + Math.floor(Math.random() * 5));
-      } else if (action === 'random') {
-        dataValues = dataValues.map(() => Math.floor(Math.random() * 25));
-      } else if (action === 'reset') {
-        dataValues = [12, 19, 8, 15, 22, 10];
-      }
+  <!-- Renewable share pie chart -->
+  <section id="source-share" class="chart-container">
+    <h4>Répartition des sources renouvelables</h4>
+    <div id="chart-renewable-pie" style="height: 350px;"></div>
+  </section>
 
-      chart.data.datasets[0].data = dataValues;
-      chart.update();
-    }
-  </script>
+  <!-- Regional map placeholder (could embed a map or use a static image) -->
+  <section id="regional-map" class="chart-container">
+    <h4>Production d’énergie par région</h4>
+    <div id="chart-regional-map" style="height: 450px; text-align:center; line-height:450px; color:#6c757d;">
+      Carte interactive à venir
+    </div>
+  </section>
 
+</div>
+
+<footer class="text-center py-4">
+  <small>© 2025 EnergiFrance | Données fictives | Affichage inspiré de tableau de bord moderne</small>
+</footer>
+
+<script>
+// Exemple de données fictives
+const fakeDates = ['2024-01','2024-02','2024-03','2024-04','2024-05','2024-06'];
+const fakeProd = [12000,13000,12500,14000,15000,15500];
+const fakeCons = [11000,11500,11700,13000,13500,14000];
+const fakeRenewTotal = [3000,3200,3400,3600,3800,4000];
+
+// Calcul KPI
+const avgCons = Math.round(fakeCons.reduce((a,b)=>a+b,0)/fakeCons.length);
+const totalRenew = fakeRenewTotal.reduce((a,b)=>a+b,0);
+const shareRenew = (totalRenew / fakeProd.reduce((a,b)=>a+b,0) * 100).toFixed(1);
+
+document.getElementById('metric-consumption').textContent = avgCons + ' MWh';
+document.getElementById('metric-renewable-total').textContent = totalRenew + ' MWh';
+document.getElementById('metric-renewable-share').textContent = shareRenew + ' %';
+
+// Time series chart
+Plotly.newPlot('chart-timeseries', [
+  { x: fakeDates, y: fakeProd, name: 'Production totale', mode:'lines+markers' },
+  { x: fakeDates, y: fakeCons, name: 'Consommation totale', mode:'lines+markers' }
+], {
+  margin:{t:30},
+  yaxis:{title:'MWh'},
+  xaxis:{title:'Période'}
+});
+
+// Renewable pie chart
+const fakeSources = ['Solaire','Éolien','Hydraulique'];
+const fakeValues = [1500,1800,700];
+Plotly.newPlot('chart-renewable-pie', [
+  { values: fakeValues, labels: fakeSources, type:'pie', textinfo:'label+percent' }
+], {
+  margin:{t:20}
+});
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
