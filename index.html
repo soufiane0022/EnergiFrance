@@ -2,186 +2,229 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>EnergiFrance Dashboard</title>
+  <title>EnergiFrance – Suivi de l’électricité en France</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.plot.ly/plotly-2.26.1.min.js"></script>
+
+  <!-- Styles -->
   <style>
-  body {
-    padding-top: 70px;
-    background-color: #eef2f7;
-    font-family: 'Segoe UI', sans-serif;
-  }
-  .navbar {
-    background-color: #0a2342; /* deep navy blue */
-  }
-  .navbar-brand,
-  .navbar-nav .nav-link {
-    color: #ffffff !important; /* white text */
-  }
-  .navbar-nav .nav-link.active {
-    font-weight: bold;
-    border-bottom: 2px solid #007bff; /* highlight active link */
-  }
-  .metric-card {
-    background-color: #ffffff; /* white cards for readability */
-    border-radius: 0.5rem;
-    padding: 1rem;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
-  }
+    :root {
+      --primary-color: #0d253f;        /* bleu foncé */
+      --secondary-color: #1e3a5f;      /* bleu légèrement clair */
+      --accent-color: #00b5e2;         /* bleu accent */
+      --bg-color: #f7f9fc;             /* fond clair */
+      --card-bg: #ffffff;
+      --text-color: #333333;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+    }
+    header {
+      background-color: var(--primary-color);
+      color: #ffffff;
+      padding: 1rem 2rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    nav {
+      margin-top: 0.5rem;
+    }
+    nav a {
+      color: #ffffff;
+      margin-right: 1.5rem;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .container {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .kpi-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .kpi-card {
+      flex: 1;
+      min-width: 200px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+    }
+    .kpi-card .label {
+      font-size: 0.9rem;
+      color: #666666;
+    }
+    .kpi-card .value {
+      font-size: 1.8rem;
+      margin-top: 0.3rem;
+      color: var(--primary-color);
+    }
+    .chart-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    footer {
+      text-align: center;
+      padding: 1.5rem 0;
+      color: #777777;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 768px) {
+      .kpi-row {
+        flex-direction: column;
+      }
+    }
+  </style>
 
-  .metric-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  }
-  .metric-value {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #0a2342; /* dark blue for key numbers */
-  }
-  .metric-label {
-    font-size: 0.9rem;
-    color: #6c757d; /* neutral gray */
-  }
-  .chart-container {
-    background-color: #ffffff;
-    border-left: 5px solid #0a2342; /* accent border in dark blue */
-    border-radius: 0.5rem;
-    padding: 1.2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1.5rem;
-  }
-
-  /* Section titles */
-  h4 {
-    color: #0a2342; /* dark blue */
-    font-weight: 600;
-    margin-bottom: 1rem;
-  }
-
-  /* Footer */
-  footer {
-    background-color: #0a2342;
-    color: #ffffff;
-    padding: 1rem 0;
-    margin-top: 2rem;
-  }
-
-  footer small {
-    opacity: 0.8;
-  }
-</style>
+  <!-- Librairies -->
+  <script src="https://cdn.plot.ly/plotly-2.26.1.min.js"></script>
 </head>
 <body>
 
-<nav class="navbar fixed-top navbar-expand-lg">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">⚡ EnergiFrance</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link active" href="#overview">Vue globale</a></li>
-        <li class="nav-item"><a class="nav-link" href="#timeseries">Courbes</a></li>
-        <li class="nav-item"><a class="nav-link" href="#source-share">Part renouvelables</a></li>
-        <li class="nav-item"><a class="nav-link" href="#regional-map">Carte régionale</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<header>
+  <h1>EnergiFrance</h1>
+  <nav>
+    <a href="#overview">Vue d’ensemble</a>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#analysis">Analyse</a>
+    <a href="#about">À propos</a>
+  </nav>
+</header>
 
 <div class="container">
+  <!-- Section Vue d'ensemble -->
+  <section id="overview">
+    <h2>Vue d’ensemble</h2>
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="label">Consommation moyenne</div>
+        <div class="value" id="kpi-consumption">— MWh</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">Production renouvelable (totale)</div>
+        <div class="value" id="kpi-renewable">— MWh</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">Part des renouvelables</div>
+        <div class="value" id="kpi-renew-share">— %</div>
+      </div>
+    </div>
 
-  <!-- Overview metrics -->
-  <section id="overview" class="my-5">
-    <div class="row g-3">
-      <div class="col-md-4">
-        <div class="metric-card text-center">
-          <div class="metric-label">Consommation moyenne (MWh)</div>
-          <div class="metric-value" id="metric-consumption">—</div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="metric-card text-center">
-          <div class="metric-label">Production renouvelable totale (MWh)</div>
-          <div class="metric-value" id="metric-renewable-total">—</div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="metric-card text-center">
-          <div class="metric-label">Part des renouvelables (%)</div>
-          <div class="metric-value" id="metric-renewable-share">—</div>
-        </div>
-      </div>
+    <div class="chart-card">
+      <h3>Évolution production vs consommation</h3>
+      <div id="chart-timeseries" style="height:400px;"></div>
+    </div>
+    <div class="chart-card">
+      <h3>Répartition des sources d’énergies renouvelables</h3>
+      <div id="chart-pie" style="height:400px;"></div>
     </div>
   </section>
 
-  <!-- Time series chart -->
-  <section id="timeseries" class="chart-container">
-    <h4>Production vs Consommation dans le temps</h4>
-    <div id="chart-timeseries" style="height: 400px;"></div>
-  </section>
-
-  <!-- Renewable share pie chart -->
-  <section id="source-share" class="chart-container">
-    <h4>Répartition des sources renouvelables</h4>
-    <div id="chart-renewable-pie" style="height: 350px;"></div>
-  </section>
-
-  <!-- Regional map placeholder (could embed a map or use a static image) -->
-  <section id="regional-map" class="chart-container">
-    <h4>Production d’énergie par région</h4>
-    <div id="chart-regional-map" style="height: 450px; text-align:center; line-height:450px; color:#6c757d;">
-      Carte interactive à venir
+  <!-- Section Dashboard détaillé -->
+  <section id="dashboard">
+    <h2>Dashboard détaillé</h2>
+    <div class="chart-card">
+      <h3>Production par source dans le temps (stacked)</h3>
+      <div id="chart-stacked" style="height:400px;"></div>
+    </div>
+    <div class="chart-card">
+      <h3>Production par région</h3>
+      <div id="chart-bar-regions" style="height:400px;"></div>
     </div>
   </section>
 
+  <!-- Section Analyse -->
+  <section id="analysis">
+    <h2>Analyse & indicateurs</h2>
+    <div class="chart-card">
+      <h3>Indicateurs clés</h3>
+      <pre id="analysis-text">Chargement des indicateurs…</pre>
+    </div>
+  </section>
+
+  <!-- Section À propos -->
+  <section id="about">
+    <h2>À propos</h2>
+    <p>Projet « EnergiFrance » – visualisation de la consommation et de la production d’électricité en France, avec focus sur les énergies renouvelables.</p>
+    <h4>Membres du groupe</h4>
+    <ul>
+      <li>Étudiant 1 — n° 000000</li>
+      <li>Étudiant 2 — n° 000000</li>
+    </ul>
+    <h4>Sources de données</h4>
+    <ul>
+      <li>RTE ÉCO2Mix</li>
+      <li>Enedis Open Data</li>
+      <li>ADEME</li>
+    </ul>
+  </section>
 </div>
 
-<footer class="text-center py-4">
-  <small>© 2025 EnergiFrance | Données fictives | Affichage inspiré de tableau de bord moderne</small>
+<footer>
+  © 2025 EnergiFrance · Données ouvertes · Dépôt GitHub
 </footer>
 
+<!-- Script pour données fictives et initialisation des graphiques -->
 <script>
-// Exemple de données fictives
-const fakeDates = ['2024-01','2024-02','2024-03','2024-04','2024-05','2024-06'];
-const fakeProd = [12000,13000,12500,14000,15000,15500];
-const fakeCons = [11000,11500,11700,13000,13500,14000];
-const fakeRenewTotal = [3000,3200,3400,3600,3800,4000];
+  // Exemple de données fictives
+  const dates = ["2023-01","2023-02","2023-03","2023-04","2023-05","2023-06","2023-07","2023-08","2023-09","2023-10"];
+  const production = [55000, 58000, 60000, 63000, 65000, 64000, 66000, 67000, 69000, 70000];
+  const consommation = [60000, 62000, 63000, 65000, 66800, 66000, 67000, 68000, 69500, 71000];
+  const renewables = [15000, 16000, 17000, 18000, 19000, 18500, 20000, 20500, 21000, 22000];
 
-// Calcul KPI
-const avgCons = Math.round(fakeCons.reduce((a,b)=>a+b,0)/fakeCons.length);
-const totalRenew = fakeRenewTotal.reduce((a,b)=>a+b,0);
-const shareRenew = (totalRenew / fakeProd.reduce((a,b)=>a+b,0) * 100).toFixed(1);
+  // KPI calculation
+  const avgConsumption = consommation.reduce((a,b) => a + b, 0) / consommation.length;
+  document.getElementById("kpi-consumption").textContent = avgConsumption.toFixed(0) + " MWh";
+  const totalRenew = renewables.reduce((a,b)=>a+b,0);
+  document.getElementById("kpi-renewable").textContent = totalRenew.toFixed(0) + " MWh";
+  const totalProd = production.reduce((a,b)=>a+b,0);
+  const renewShare = (totalRenew / totalProd) * 100;
+  document.getElementById("kpi-renew-share").textContent = renewShare.toFixed(1) + " %";
 
-document.getElementById('metric-consumption').textContent = avgCons + ' MWh';
-document.getElementById('metric-renewable-total').textContent = totalRenew + ' MWh';
-document.getElementById('metric-renewable-share').textContent = shareRenew + ' %';
+  // Timeseries chart
+  Plotly.newPlot("chart-timeseries", [
+    { x: dates, y: production, name: "Production totale", mode: "lines", line: {color: "#1e3a5f"} },
+    { x: dates, y: consommation, name: "Consommation totale", mode: "lines", line: {color: "#00b5e2"} }
+  ], { margin:{t:30}, legend:{orientation:"h"}, paper_bgcolor:"white", plot_bgcolor:"white" });
 
-// Time series chart
-Plotly.newPlot('chart-timeseries', [
-  { x: fakeDates, y: fakeProd, name: 'Production totale', mode:'lines+markers' },
-  { x: fakeDates, y: fakeCons, name: 'Consommation totale', mode:'lines+markers' }
-], {
-  margin:{t:30},
-  yaxis:{title:'MWh'},
-  xaxis:{title:'Période'}
-});
+  // Pie chart
+  Plotly.newPlot("chart-pie", [
+    { labels: ["Solaire", "Éolien", "Hydraulique", "Bio-énergies"], values: [5000, 8000, 4000, 2000], type: "pie", marker:{colors:["#00b5e2","#1e3a5f","#4da6ff","#80c8ff"]} }
+  ], { margin:{t:30}, legend:{orientation:"h"}, paper_bgcolor:"white", plot_bgcolor:"white" });
 
-// Renewable pie chart
-const fakeSources = ['Solaire','Éolien','Hydraulique'];
-const fakeValues = [1500,1800,700];
-Plotly.newPlot('chart-renewable-pie', [
-  { values: fakeValues, labels: fakeSources, type:'pie', textinfo:'label+percent' }
-], {
-  margin:{t:20}
-});
+  // Stacked chart
+  Plotly.newPlot("chart-stacked", [
+    { x: dates, y: [3000,3200,3300,3400,3500,3450,3600,3650,3700,3800], name:"Solaire", stackgroup:"one", line:{color:"#00b5e2"} },
+    { x: dates, y: [5000,5200,5300,5400,5500,5450,5600,5650,5700,5800], name:"Éolien", stackgroup:"one", line:{color:"#1e3a5f"} },
+    { x: dates, y: [2000,2100,2200,2300,2400,2350,2500,2550,2600,2700], name:"Hydraulique", stackgroup:"one", line:{color:"#4da6ff"} }
+  ], { margin:{t:30}, legend:{orientation:"h"}, paper_bgcolor:"white", plot_bgcolor:"white" });
 
+  // Bar chart regions (exemple fictif)
+  Plotly.newPlot("chart-bar-regions", [
+    { x:["Île-de-France","Auvergne-Rhône-Alpes","Nouvelle-Aquitaine","Occitanie","Grand Est"], y:[12000,9000,8500,8000,7500], type:"bar", marker:{color:"#1e3a5f"} }
+  ], { margin:{t:30}, xaxis:{tickangle:-45}, paper_bgcolor:"white", plot_bgcolor:"white" });
+
+  // Text analysis
+  document.getElementById("analysis-text").textContent =
+    "Période : 2023-01 → 2023-10\n" +
+    "Production totale (fictive) : " + totalProd.toFixed(0) + " MWh\n" +
+    "Consommation totale (fictive) : " + consommation.reduce((a,b)=>a+b,0).toFixed(0) + " MWh\n" +
+    "Part des renouvelables : " + renewShare.toFixed(1) + " %";
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
