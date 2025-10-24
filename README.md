@@ -101,17 +101,7 @@ gantt
 
 ------------------------------------------------------------------------
 
-## Jeux de données utilisés
-
-- **RTE Open Data** – Production et consommation d’électricité par type
-  d’énergie.  
-- **ENEDIS Open Data** – Données locales et régionales de
-  consommation.  
-- **INSEE** – Données démographiques et structurelles par région.
-
-------------------------------------------------------------------------
-
-## Choix des packages
+##  Choix des packages
 
 - **Pandas** : lire et manipuler les données CSV (RTE, ENEDIS, INSEE).  
 - **NumPy** : effectuer des calculs statistiques et des agrégations.  
