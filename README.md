@@ -1,12 +1,12 @@
-# ⚡ EnergiFrance
+#  EnergiFrance
 
-## 🌐 Site Web
+##  Site Web
 
 [**Accéder au site du projet EnergiFrance**](https://soufiane0022.github.io/EnergiFrance/)
 
 ---
 
-## 🎯 Description du projet / Objectif
+##  Description du projet / Objectif
 
 Le projet **EnergiFrance** a pour objectif de visualiser la production et la consommation d’énergie en France, ainsi que la part des énergies renouvelables (solaire, éolien, hydraulique, etc.), à partir de données publiques fournies par **RTE** et **ENEDIS**.
 
@@ -31,7 +31,7 @@ Pour rendre l’expérience intuitive, nous mettrons en place :
 
 ---
 
-## 👥 Membres de l’équipe et rôles
+##  Membres de l’équipe et rôles
 
 | Nom | Rôle |
 |------|------|
@@ -42,7 +42,7 @@ Pour rendre l’expérience intuitive, nous mettrons en place :
 
 ---
 
-## 📅 Diagramme de Gantt
+##  Diagramme de Gantt
 
 ```mermaid
 gantt
@@ -81,3 +81,48 @@ gantt
     Tests finaux et corrections                          :a16, 2025-12-16, 3d
     Répétition de la présentation                        :a17, 2025-12-19, 2d
     Soutenance finale et dépôt du projet                 :a18, 2025-12-22, 1d
+
+    
+    
+---
+
+##  Jeux de données utilisés
+
+- **RTE Open Data** – Production et consommation d’électricité par type d’énergie.  
+- **ENEDIS Open Data** – Données locales et régionales de consommation.  
+- **INSEE** – Données démographiques et structurelles par région.
+
+---
+
+##  Choix des packages
+
+- **Pandas** : lire et manipuler les données CSV (RTE, ENEDIS, INSEE).  
+- **NumPy** : effectuer des calculs statistiques et des agrégations.  
+- **Plotly** : créer des graphiques interactifs.  
+- **Streamlit** : concevoir une interface interactive.  
+- **GeoPandas** : manipuler les données géographiques (régions de France).  
+- **Folium** : afficher la carte de France avec les régions colorées selon la production.  
+- **Matplotlib** : produire des graphiques statiques.  
+- **Requests** : télécharger les données publiques depuis les API.  
+- **OpenPyXL** : lire/exporter les fichiers Excel.  
+- **Jupyter / Quarto** : générer la documentation et tester les fonctions.
+
+---
+
+##  Choix des langages
+
+- **Python**  
+- **HTML**
+
+---
+
+##  Pipeline de développement
+
+1. **Acquisition des données** : récupération des jeux RTE, ENEDIS, INSEE.  
+2. **Nettoyage et prétraitement** : suppression des doublons, valeurs manquantes.  
+3. **Analyse exploratoire** : étude des tendances et corrélations.  
+4. **Visualisations** : création des graphiques, cartes et indicateurs.  
+5. **Tableau de bord** : intégration dans une interface Streamlit.  
+6. **Documentation** : rédaction et hébergement sur GitHub Pages.  
+7. **Collaboration Git** : le développement est organisé en plusieurs branches, chacune dédiée à une tâche spécifique (traitement des données, visualisation, interface web, documentation), ce qui permet un travail parallèle et une intégration progressive dans la branche principale.
+
