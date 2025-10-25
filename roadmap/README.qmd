@@ -1,4 +1,3 @@
----
 title: "EnergiFrance - Roadmap Mi-Parcours"
 author: "Groupe EnergiFrance"
 date: "2025-10-25"
@@ -15,7 +14,7 @@ Le projet EnergiFrance a pour objectif de visualiser la production et la consomm
 
 ### Objectifs du projet
 
-- **Comparer la production et la consommation totale d’énergie** sur différentes périodes (journalière, hebdomadaire, mensuelle, annuelle, décennale, etc...), afin d’évaluer l’adéquation entre l’offre et la demande et d’observer les évolutions à long terme.  
+- **Comparer la production et la consommation totale d’énergie** sur différentes périodes (jour, mois, année, décennie, etc...), afin d’évaluer l’adéquation entre l’offre et la demande et d’observer les évolutions à long terme.  
 - **Différencier l’énergie renouvelable de l’énergie non renouvelable**, pour mesurer la contribution de chaque type au mix énergétique national.  
 - **Identifier l’énergie la plus produite et la plus consommée**, afin de mettre en évidence les sources dominantes et les habitudes de consommation.  
 - **Calculer le taux de consommation**, défini comme le rapport entre l’énergie consommée et l’énergie produite, pour analyser l’efficacité énergétique globale.  
