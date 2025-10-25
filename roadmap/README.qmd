@@ -1,0 +1,120 @@
+title: "EnergiFrance - Roadmap Mi-Parcours"
+author: "Groupe EnergiFrance"
+date: "2025-10-25"
+format: html
+---
+
+# EnergiFrance
+
+**Site Web interactif pour la visualisation et la prédiction de la production et consommation d'énergie en France**
+[**Accéder au site du projet EnergiFrance**](https://soufiane0022.github.io/EnergiFrance/)
+
+## Description du projet / Objectifs
+
+Le projet EnergiFrance a pour objectif de visualiser la production et la consommation d’énergie en France, en différenciant énergie renouvelable et non renouvelable, et de prévoir la consommation future afin d’anticiper les besoins, d’identifier les zones critiques et de proposer des recommandations adaptées.
+
+### Objectifs du projet
+
+- **Comparer la production et la consommation totale d’énergie** sur différentes périodes (jour, mois, année, décennie, etc...), afin d’évaluer l’adéquation entre l’offre et la demande et d’observer les évolutions à long terme.  
+- **Différencier l’énergie renouvelable de l’énergie non renouvelable**, pour mesurer la contribution de chaque type au mix énergétique national.  
+- **Identifier l’énergie la plus produite et la plus consommée**, afin de mettre en évidence les sources dominantes et les habitudes de consommation.  
+- **Calculer le taux de consommation**, défini comme le rapport entre l’énergie consommée et l’énergie produite, pour analyser l’efficacité énergétique globale.  
+- **Analyser l’équité de consommation par habitant et par région**, afin de détecter les disparités régionales et d’évaluer la répartition de l’énergie sur le territoire.  
+- **Identifier les zones critiques et anticiper les potentielles crises énergétiques**, pour mieux planifier la production et la distribution.  
+- **Modéliser la consommation future et proposer des recommandations adaptées**, en utilisant des prévisions basées sur les tendances historiques et les données disponibles.
+
+### Code couleur pour les visualisations régionales
+Pour rendre l’expérience intuitive, nous mettrons en place :
+
+- un **code couleur** indiquant la part d’énergie renouvelable :  
+  🟩 vert : forte part d’énergie renouvelable  
+  🟧 orange : part moyenne  
+  🟥 rouge : faible part renouvelable  
+
+### Onglets principaux du tableau de bord
+
+- **Consommation** : évolution de la consommation d’électricité dans le temps.  
+- **Mix énergétique** : répartition des différentes sources d’énergie (nucléaire, solaire, éolien, hydraulique, etc.).  
+- **Carte interactive** : vision régionale de la production et de la consommation sur la carte de la France.
+
+## Membres de l'équipe et rôles
+
+| Nom                         | Rôle                                              |
+| --------------------------- | ------------------------------------------------- |
+| Yonkeu-Waya Kevin-Roseverlt | Extraction, nettoyage et intégration des données |
+| Soumah Ousmane              | Visualisation et analyse                          |
+| Enniya Soufiane             | Développement du tableau de bord et interface web|
+| Assoumani Ben-enfane        | Documentation et coordination                     |
+
+## Jeux de données utilisés
+
+- **RTE Open Data** : Production et consommation par type d’énergie.  
+- **ENEDIS Open Data** : Données régionales de consommation.  
+- **INSEE** : Données démographiques et structurelles régionales.
+
+## Packages et technologies
+
+- **Python** : Pandas, NumPy, Plotly, Streamlit, GeoPandas, Folium, Matplotlib, Requests, OpenPyXL  
+- **Jupyter / Quarto** : Documentation et tests  
+- **HTML** : Interface web
+
+## Pipeline de développement
+
+1. Acquisition des données (RTE, ENEDIS, INSEE)  
+2. Nettoyage et prétraitement (fusion, gestion des valeurs manquantes)  
+3. Calcul des indicateurs et métriques enrichis (production vs consommation, renouvelable vs non renouvelable, taux de consommation, équité par habitant et région)  
+4. Analyse exploratoire et identification des zones critiques  
+5. Visualisations graphiques et cartes interactives  
+6. Modèle prédictif de consommation future, sur périodes journalière, hebdomadaire, mensuelle, annuelle et décennale  
+7. Développement du tableau de bord Streamlit  
+8. Documentation et mise en ligne sur GitHub Pages
+
+## Branches Git recommandées
+
+- `main` : version stable  
+- `dev-data` : extraction et nettoyage des données, calcul des indicateurs  
+- `visualisation` : visualisations et cartes  
+- `dev-prediction` : modèle de prévision et analyses avancées  
+- `web-integration` : intégration dans le tableau de bord
+
+## Diagramme de Gantt
+
+```mermaid
+gantt
+    dateFormat  YYYY-MM-DD
+    title Planification enrichie du projet EnergiFrance
+    todayMarker off
+
+    section Démarrage
+    Choix du projet                                      :done, a1, 2025-10-17, 3d
+    Création du dépôt GitHub et répartition des tâches  :done, a2, 2025-10-22, 2d
+    Rédaction de la roadmap initiale                     :a3, 2025-10-24, 2d
+
+    section Données
+    Recherche et sélection des jeux de données          :a4, 2025-10-25, 3d
+    Extraction et nettoyage des données                 :a5, 2025-10-28, 5d
+    Calcul des indicateurs de production/consommation  :a6, 2025-11-02, 5d
+    Vérification et intégration dans le dépôt          :a7, 2025-11-09, 3d
+
+    section Analyse
+    Analyse exploratoire des données                     :a8, 2025-11-12, 5d
+    Détermination des zones critiques et indicateurs    :a9, 2025-11-17, 5d
+    Graphiques interactifs consommation/production      :a10, 2025-11-22, 5d
+    Carte interactive de la France avec indicateurs     :a11, 2025-11-27, 5d
+
+    section Prédiction
+    Calcul des prévisions de consommation future        :a12, 2025-12-02, 5d
+    Analyse d’adaptation et recommandations            :a13, 2025-12-07, 4d
+
+    section Tableau de bord
+    Développement Streamlit / intégration visualisations :a14, 2025-12-11, 5d
+    Tests et ajustements interface                      :a15, 2025-12-16, 3d
+
+    section Documentation
+    Rédaction des docstrings et commentaires            :a16, 2025-12-19, 3d
+    Préparation du README final et Gantt                :a17, 2025-12-22, 2d
+    Mise en ligne sur GitHub Pages                       :a18, 2025-12-24, 1d
+
+    section Finalisation
+    Répétition de la présentation                        :a19, 2025-12-26, 2d
+    Soutenance finale et dépôt du projet                 :a20, 2025-12-28, 1d
