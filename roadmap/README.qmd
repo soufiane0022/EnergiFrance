@@ -7,6 +7,7 @@ format: html
 # EnergiFrance
 
 **Site Web interactif pour la visualisation et la prédiction de la production et consommation d'énergie en France**
+[**Accéder au site du projet EnergiFrance**](https://soufiane0022.github.io/EnergiFrance/)
 
 ## Description du projet / Objectifs
 
@@ -23,10 +24,12 @@ Le projet EnergiFrance a pour objectif de visualiser la production et la consomm
 - **Modéliser la consommation future et proposer des recommandations adaptées**, en utilisant des prévisions basées sur les tendances historiques et les données disponibles.
 
 ### Code couleur pour les visualisations régionales
+Pour rendre l’expérience intuitive, nous mettrons en place :
 
-- 🟩 Vert : forte part d’énergie renouvelable  
-- 🟧 Orange : part moyenne  
-- 🟥 Rouge : faible part renouvelable
+- un **code couleur** indiquant la part d’énergie renouvelable :  
+  🟩 vert : forte part d’énergie renouvelable  
+  🟧 orange : part moyenne  
+  🟥 rouge : faible part renouvelable  
 
 ### Onglets principaux du tableau de bord
 
@@ -70,9 +73,9 @@ Le projet EnergiFrance a pour objectif de visualiser la production et la consomm
 
 - `main` : version stable  
 - `dev-data` : extraction et nettoyage des données, calcul des indicateurs  
-- `dev-visual` : visualisations et cartes  
+- `visualisation` : visualisations et cartes  
 - `dev-prediction` : modèle de prévision et analyses avancées  
-- `dev-ui` : intégration dans le tableau de bord
+- `web-integration` : intégration dans le tableau de bord
 
 ## Diagramme de Gantt
 
